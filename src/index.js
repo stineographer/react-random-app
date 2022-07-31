@@ -76,14 +76,15 @@ function Square(props) {
 
 class Board extends React.Component {
   renderSquare(i) {
-    console.log(" Board.renderSquare props: " + this.props);//only prints objectObject
-     console.log(JSON.stringify(this.props)); //this one prints!!
+    console.log(" Board.renderSquare props: " + this.props);
+     console.log(JSON.stringify(this.props));
     //{"squares":[{"name":"michael","age":70,"count":233482},{"name":"matthew","age":36,"count":34742},{"name":"jane","age":36,"count":35010}]}
-    //so fucking close to printing this fucking data!!
+
     return (
       <Square
         name={this.props.squares[i].name}
         age={this.props.squares[i].age}
+        count={this.props.squares[i].count}
         onClick={() => this.props.onClick(i)}
       />
     );
@@ -93,8 +94,26 @@ class Board extends React.Component {
     return (
       <div>
         <div className="board-row">
+            <label>
+            Name:
+            <input type="text" value={this.props.squares[0].name} onChange={this.handleChange} />
+          </label>
+
+          <label>
+            Name:
+            <input type="text" value={this.props.squares[1].name} onChange={this.handleChange} />
+          </label>
+           <label>
+            Name:
+            <input type="text" value={this.props.squares[2].name} onChange={this.handleChange} />
+          </label>
+        </div>
+        <div className="board-row">
+
           {this.renderSquare(0)}
+          <div></div>
           {this.renderSquare(1)}
+          <div></div>
           {this.renderSquare(2)}
         </div>
 
@@ -131,10 +150,10 @@ fetch('https://api.agify.io?name[]=michael&name[]=matthew&name[]=jane')
     //const current = history[history.length - 1];
     const squares = this.state.squares.slice();
 
-    //console.log("look!", this.state.squares)//non-empty
-//this.state.history.squares[i].props.value = 5;
-   //squares[i].age = 5;//THIS WORKS!!!
-   // console.log("look again! ", squares[i].age)
+    console.log("look! I'm in this click!! ", squares[i])//non-empty
+    squares[i].age = 5;
+     squares[i].age = 5;//THIS WORKS!!!
+     console.log("look again! ", squares[i].age)
 
     this.setState({
       squares: squares
