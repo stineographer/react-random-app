@@ -26,12 +26,12 @@ ol, ul {
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
-  height: 194px;
+  height: 214px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 194px;
+  width: 204px;
 }
 
 .square:focus {
@@ -40,6 +40,11 @@ ol, ul {
 
 .kbd-navigation .square:focus {
   background: #ddd;
+}
+
+.label {
+  padding-left: 0.6em;
+   padding-rightt: 0.3em;
 }
 
 .game {

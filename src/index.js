@@ -67,14 +67,18 @@ p.then((v) => {
 function Square(props) {
   console.log("Square props: " + props);
   return (
-    <button className="square" onClick={props.onClick}>
-      {props.name + ": "}
-      {props.age}
-    </button>
+    <div className="square" onClick={props.onClick}>
+      {props.name}
+      <p>{"Age predict: " + props.age}</p>
+      {"Hit count : " + props.count}
+    </div>
   );
 }
 
 class Board extends React.Component {
+
+
+
   renderSquare(i) {
     console.log(" Board.renderSquare props: " + this.props);
      console.log(JSON.stringify(this.props));
@@ -94,20 +98,27 @@ class Board extends React.Component {
     return (
       <div>
         <div className="board-row">
-            <label>
-            Name:
-            <input type="text" value={this.props.squares[0].name} onChange={this.handleChange} />
-          </label>
+              <form onSubmit={this.handleSubmit}>
+                  <label className="label">
+                    Name:
+                    <input type="text"
+                    value={this.props.squares[0].name}
+                    onChange={this.handleChange} />
+                  </label>
 
-          <label>
-            Name:
-            <input type="text" value={this.props.squares[1].name} onChange={this.handleChange} />
-          </label>
-           <label>
-            Name:
-            <input type="text" value={this.props.squares[2].name} onChange={this.handleChange} />
-          </label>
+                  <label className="label">
+                    Name:
+                    <input type="text" value={this.props.squares[1].name} onChange={this.handleChange} />
+                  </label>
+                   <label className="label">
+                    Name:
+                    <input type="text" value={this.props.squares[2].name} onChange={this.handleChange} />
+                  </label>
+                <input type="submit" value="Submit" />
+              </form>
+
         </div>
+
         <div className="board-row">
 
           {this.renderSquare(0)}
