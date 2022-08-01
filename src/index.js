@@ -185,8 +185,20 @@ class NameForm extends React.Component {
      const { squares, value } = this.state;
 
      //the line below changed EVERYTHING!!!!!
-       if (Object.keys(squares).length === 0) return <div>
-         <h1> Pleses wait some time.... </h1> </div> ;
+       if (Object.keys(squares).length === 0) return (
+
+         <form onSubmit={this.handleSubmit}>
+          <div>
+           <h1> Pleses wait some time.... Or "try" another submission ?</h1>
+         </div>
+        <label>
+          Name:
+          <input type="text" value={this.state.value} onChange={this.handleChange} />
+        </label>
+        <input type="submit" value="Submit" />
+
+           </form>
+       );
 
 
          console.log("look at them squares: " + JSON.stringify(squares));
