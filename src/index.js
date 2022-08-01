@@ -59,7 +59,6 @@ class Board extends React.Component {
   } //end of renderSquare: spits out Squares within a Board, each has a click function
 
 
-
   render() {
 
          this.props.squares.forEach(element => console.log("Files array element, might have to do .name: " + element.name));
@@ -116,7 +115,7 @@ class NameForm extends React.Component {
                     {
                                //hard-coded:
                                   squares: data,
-                                  value: 'loaded ' + myStateVal
+                                  value: myStateVal
                       //this is array of 3 objects
                       //,
                         //          DataisLoaded: true
@@ -189,10 +188,26 @@ class NameForm extends React.Component {
        if (Object.keys(squares).length === 0) return <div>
          <h1> Pleses wait some time.... </h1> </div> ;
 
-         console.log("look at them squares: " + JSON.stringify(squares));
 
-          squares.files.forEach(element => console.log(element));
-         console.log("look at them squares files: " + JSON.stringify(squares.files));//wtf is in here
+         console.log("look at them squares: " + JSON.stringify(squares));
+    console.log("where's is dark?" + squares.is_dark)
+         const containsFiles = Object.keys(squares).includes("files");
+    //DO EARLY RETURN HERE FOR NO FILES?
+     if (!containsFiles) return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Name:
+          <input type="text" value={this.state.value} onChange={this.handleChange} />
+        </label>
+        <input type="submit" value="Submit" />
+          <div>Title Searched: {value}</div>
+          <div>Directory: {squares.dir} </div>
+          <div> "is_dark: " {squares.is_dark.toString()} </div>
+      </form>
+
+    );//END RETURN
+         // squares.files.forEach(element => console.log(element));
+         //console.log("look at them squares files: " + JSON.stringify(squares.files));//wtf is in here
 
 
 
@@ -206,10 +221,9 @@ class NameForm extends React.Component {
           <div>Title Searched: {value}</div>
           <div>Directory: {squares.dir} </div>
 
-           <div>Files count: {squares.files_count} </div>
-             <div>Directory: {squares.dir} </div>
+             <div>Files count: {squares.files_count} </div>
 
-          <div className="game-board">
+             <div className="game-board">
             <div className="board-row">
               <div>
               <Board
@@ -220,11 +234,13 @@ class NameForm extends React.Component {
               </div>
             </div>
           </div>
+
+
       </form>
 
 
 
-    );
+    );//END RETURN
   }//END THE FORM render!
 }//END FORM COMPONENT!
 
