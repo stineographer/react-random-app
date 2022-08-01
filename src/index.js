@@ -1,4 +1,4 @@
-//missing imports?
+//
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
@@ -8,6 +8,68 @@ import "./index.css";
 https://archive.org/metadata/TheAdventuresOfTomSawyer
 
 */
+
+//gonna pass in squares.files
+//which often has: name, title, source, format
+//would be nice to actually catch when that property ain't there
+function Square(props) {
+  console.log("Square props: " + props);
+  return (
+    <div className="square" onClick={props.onClick}>
+      <p>Source Name: {props.name}</p>
+      <p>Source Title: {props.title}</p>
+      <p>{"Source Type: " + props.source}</p>
+      <p>{"Format : " + props.format}</p>
+    </div>
+  );
+}//end Square function
+
+class Board extends React.Component {
+
+    truncateString(str, n){//problem is SourceName, too long -only allow 10 chars
+        return (str.length > n) ? str.slice(0, n-1) + '... ' : str;//
+      }
+
+  renderSquare(i) {
+    console.log(" Board.renderSquare props: " + this.props);
+     console.log(JSON.stringify(this.props));
+    //{"squares":[{"name":"michael","age":70,"count":233482},{"name":"matthew","age":36,"count":34742},{"name":"jane","age":36,"count":35010}]}
+
+
+    //const truncatedName =
+    //this.props.squares[i].name != undefined
+
+    console.log("number of rows" + this.props.squares % 3);
+    let rowNum = this.props.squares % 3;
+
+    return (
+      <Square
+        name={this.props.squares[i].name}
+        title={this.props.squares[i].title}
+        source={this.props.squares[i].source}
+        format={this.props.squares[i].format}
+        onClick={() => this.props.onClick(i)}
+      />
+    );
+  } //end of renderSquare: spits out Squares within a Board, each has a click function
+
+  render() {
+
+    return (
+      <div>
+
+        <div className="board-row">
+          {this.renderSquare(0)}
+          <div></div>
+          {this.renderSquare(1)}
+          <div></div>
+          {this.renderSquare(2)}
+        </div>
+
+      </div>
+    );
+  } //end of render visual elements function for Board class
+} //end of Board class definition
 
 class NameForm extends React.Component {
   constructor(props) {
@@ -19,7 +81,8 @@ class NameForm extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({value: event.target.value});
+    this.setState({value: event.target.value});//it's weird to me that this one property can be passed in and not rest of object (i.e., squares)
+    //but it's working, so what the hey
   }
 
   handleSubmit(event) {
@@ -57,6 +120,25 @@ class NameForm extends React.Component {
 
   }//end handleSubmit
 
+    handleClick(i) {
+    //const history = this.state.history;
+    //const current = history[history.length - 1];
+    const squares = this.state.squares.slice();
+
+    console.log("look! I'm in this click!! ", squares[i])//non-empty
+    squares[i].age = 5;
+     squares[i].age = 5;//THIS WORKS!!!
+     console.log("look again! ", squares[i].age)
+
+    this.setState({
+      squares: squares,
+      value: ''
+      //,
+        //   DataisLoaded: false
+
+    });//end setState
+
+  }//end handleClick
 
   componentDidMount() {
         let searched_title = 'The Adventures Of Tom Sawyer';
@@ -86,6 +168,8 @@ class NameForm extends React.Component {
 
     }//END componentDidMount
 
+
+
   render() {
      const { squares, value } = this.state;
 
@@ -93,10 +177,12 @@ class NameForm extends React.Component {
        if (Object.keys(squares).length === 0) return <div>
          <h1> Pleses wait some time.... </h1> </div> ;
 
- console.log("look at them squares: " + JSON.stringify(squares));
+         console.log("look at them squares: " + JSON.stringify(squares));
 
-squares.files.forEach(element => console.log(element));
+          squares.files.forEach(element => console.log(element));
          console.log("look at them squares files: " + JSON.stringify(squares.files));//wtf is in here
+
+
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -111,12 +197,23 @@ squares.files.forEach(element => console.log(element));
            <div>Files count: {squares.files_count} </div>
              <div>Directory: {squares.dir} </div>
 
+          <div className="game-board">
+            <div className="board-row">
+              <div>
+              <Board
+                  squares={squares.files}
 
-
+                  onClick={i => this.handleClick(i)}
+                  />
+              </div>
+            </div>
+          </div>
       </form>
+
+
 
     );
   }//END THE FORM render!
-}
+}//END FORM COMPONENT!
 
 ReactDOM.render(<NameForm />, document.getElementById("root"));
