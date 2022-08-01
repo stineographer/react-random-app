@@ -23,7 +23,7 @@ function Square(props) {
 
   console.log("Square props.name length: " + props.name.length);
   return (
-    <div className="square" onClick={props.onClick}>
+    <div className="square" >
       <p>Source Name: {truncatedName}</p>
       <p>Source Title: {props.title}</p>
       <p>{"Source Type: " + props.source}</p>
@@ -53,10 +53,10 @@ class Board extends React.Component {
         title={item.title}
         source={item.source}
         format={item.format}
-        onClick={() => this.props.onClick(item)}
+
       />
     );
-  } //end of renderSquare: spits out Squares within a Board, each has a click function
+  } //end of renderSquare: spits out Squares within a Board
 
 
   render() {
@@ -241,7 +241,6 @@ class NameForm extends React.Component {
               <Board
                   squares={squares.files}
 
-                  onClick={i => this.handleClick(i)}
                   />
               </div>
             </div>
