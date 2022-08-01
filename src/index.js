@@ -36,33 +36,32 @@ class NameForm extends React.Component {
             .then((res) => res.json())
             .then((data) => {
               console.log("inside componentDidMount, just before setState: " + data);
-            this.setState(
+              this.setState(
 
-                  {
-                             //hard-coded:
-                                squares: data,
-                                value: 'loaded ' + myStateVal
-                    //this is array of 3 objects
-                    //,
-                      //          DataisLoaded: true
+                    {
+                               //hard-coded:
+                                  squares: data,
+                                  value: 'loaded ' + myStateVal
+                      //this is array of 3 objects
+                      //,
+                        //          DataisLoaded: true
 
-                  }//end setState object
-                );//end setState function
+                    }//end setState object
+                  );//end setState function
 
               //this gets called absolutely last!!
               console.log("inside componentMount after setState, before end then: " + this.state.squares.created);
           //super annoying trying to get inside wtf is returned
 
-            })//end then
-
-
+            })//end last fetch then
 
   }//end handleSubmit
 
 
   componentDidMount() {
+        let searched_title = 'The Adventures Of Tom Sawyer';
 
-        fetch('https://archive.org/metadata/TheColorPurple')
+        fetch('https://archive.org/metadata/TheAdventuresOfTomSawyer')
             .then((res) => res.json())
             .then((data) => {
               console.log("inside componentDidMount, just before setState: " + data);
@@ -71,7 +70,7 @@ class NameForm extends React.Component {
                   {
                              //hard-coded:
                                 squares: data,
-                                value: ''
+                                value: searched_title
                     //this is array of 3 objects
                     //,
                       //          DataisLoaded: true
@@ -94,7 +93,10 @@ class NameForm extends React.Component {
        if (Object.keys(squares).length === 0) return <div>
          <h1> Pleses wait some time.... </h1> </div> ;
 
-         console.log("look at them squares: " + JSON.stringify(squares));//wtf is in here
+ console.log("look at them squares: " + JSON.stringify(squares));
+
+squares.files.forEach(element => console.log(element));
+         console.log("look at them squares files: " + JSON.stringify(squares.files));//wtf is in here
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -103,7 +105,14 @@ class NameForm extends React.Component {
           <input type="text" value={this.state.value} onChange={this.handleChange} />
         </label>
         <input type="submit" value="Submit" />
-           <div> {squares.created} </div>
+          <div>Title Searched: {value}</div>
+          <div>Directory: {squares.dir} </div>
+
+           <div>Files count: {squares.files_count} </div>
+             <div>Directory: {squares.dir} </div>
+
+
+
       </form>
 
     );
