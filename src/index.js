@@ -15,11 +15,9 @@ function   truncateString(str, n){//problem is SourceName, too long -only allow 
 
 //gonna pass in squares.files
 //which often has: name, title, source, format
-//would be nice to actually catch when that property ain't there
 function Square(props) {
   //try truncating name here?
    const truncatedName = props.name.length>=10? truncateString(props.name, 10) : props.name;
-
 
   console.log("Square props.name length: " + props.name.length);
   return (
@@ -29,23 +27,14 @@ function Square(props) {
       <p>{"Source Type: " + props.source}</p>
       <p>{"Format : " + props.format}</p>
     </div>
-  );
+  );//end return statement
 }//end Square function
 
 class Board extends React.Component {
 
-
-
   renderSquare(item) {
     console.log(" Board.renderSquare props: " + this.props);
      console.log(JSON.stringify(this.props));
-    //{"squares":[{"name":"michael","age":70,"count":233482},{"name":"matthew","age":36,"count":34742},{"name":"jane","age":36,"count":35010}]}
-
-
-
-
-    console.log("number of rows" + this.props.squares.length % 3);
-    let rowNum = this.props.squares.length % 3;
 
     return (
       <Square
@@ -58,10 +47,9 @@ class Board extends React.Component {
     );
   } //end of renderSquare: spits out Squares within a Board
 
-
   render() {
 
-         this.props.squares.forEach(element => console.log("Files array element, might have to do .name: " + element.name));
+         this.props.squares.forEach(element => console.log("Files array element.name: " + element.name));
 
         const fileItems = [this.props.squares.map((item, index) =>
           <div key={index}>
@@ -76,10 +64,9 @@ class Board extends React.Component {
            {fileItems}
         </div>
 
-
       </div>
     );
-  } //end of render visual elements function for Board class
+  } //end of render for Board class
 } //end of Board class definition
 
 class NameForm extends React.Component {
@@ -98,13 +85,12 @@ class NameForm extends React.Component {
 
   handleSubmit(event) {
     console.log('A name was submitted: ' + this.state.value);
-    let myStateVal = this.state.value;
-    //for the love of god please output the fucking data into the fucking dom somehow
-    //make a fucking copy!  .replace(/\s/g, "")
+    const myStateVal = this.state.value;
+    //make a copy!  .replace(/\s/g, "")
     const noSpaces = myStateVal.replace(/\s/g, "");
 
-    console.log("no fucking spaces: " + noSpaces);
-     event.preventDefault();//keep this BEFORE THE FETCH or shit breaks!!
+    console.log("no spaces: " + noSpaces);
+     event.preventDefault();//keep this BEFORE THE FETCH or it breaks!!
 
        fetch('https://archive.org/metadata/' + noSpaces)
             .then((res) => res.json())
@@ -132,14 +118,10 @@ class NameForm extends React.Component {
   }//end handleSubmit
 
     handleClick(item) {
-    //const history = this.state.history;
-    //const current = history[history.length - 1];
+    //TO DO: display full name instead of truncated
     const squares = this.state.squares.slice();
 
    // console.log("look! I'm in this click!! ", squares[i])//non-empty
-    //squares[i].age = 5;
-    // squares[i].age = 5;//THIS WORKS!!!
-    // console.log("look again! ", squares[i].age)
 
     this.setState({
       squares: squares,
@@ -161,19 +143,15 @@ class NameForm extends React.Component {
             this.setState(
 
                   {
-                             //hard-coded:
                                 squares: data,
                                 value: searched_title
-                    //this is array of 3 objects
-                    //,
-                      //          DataisLoaded: true
 
                   }//end setState object
                 );//end setState function
 
               //this gets called absolutely last!!
               console.log("inside componentMount after setState, before end then: " + this.state.squares.created);
-          //super annoying trying to get inside wtf is returned
+          //created attribute is not actually a unix timestamp, so it's kinda uselessd?
 
             })//end then
 
@@ -182,47 +160,45 @@ class NameForm extends React.Component {
 
 
   render() {
-     const { squares, value } = this.state;
+     const { squares, value, error } = this.state;
 
      //the line below changed EVERYTHING!!!!!
        if (Object.keys(squares).length === 0) return (
 
          <form onSubmit={this.handleSubmit}>
-          <div>
-           <h1> Pleses wait some time.... Or "try" another submission ?</h1>
-         </div>
-        <label>
-          Name:
-          <input type="text" value={this.state.value} onChange={this.handleChange} />
-        </label>
+            <div>
+             <h1> Pleses wait some time.... Or "try" another submission ?</h1>
+
+           </div>
+          <label>
+            Name:
+            <input type="text" value={this.state.value} onChange={this.handleChange} />
+          </label>
+
         <input type="submit" value="Submit" />
 
            </form>
        );
 
-
          console.log("look at them squares: " + JSON.stringify(squares));
-    console.log("where's is dark?" + squares.is_dark)
+          console.log("where's is dark?" + squares.is_dark)
          const containsFiles = Object.keys(squares).includes("files");
-    //DO EARLY RETURN HERE FOR NO FILES?
-     if (!containsFiles) return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Name:
-          <input type="text" value={this.state.value} onChange={this.handleChange} />
-        </label>
-        <input type="submit" value="Submit" />
-          <div>Title Searched: {value}</div>
-          <div>Directory: {squares.dir} </div>
-          <div> "is_dark: " {squares.is_dark.toString()} </div>
-      </form>
+          //DO EARLY RETURN HERE FOR NO FILES
+           if (!containsFiles) return (
+            <form onSubmit={this.handleSubmit}>
+              <label>
+                Name:
+                <input type="text" value={this.state.value} onChange={this.handleChange} />
+              </label>
+              <input type="submit" value="Submit" />
+                <div>Title Searched: {value}</div>
+                <div>Directory: {squares.dir} </div>
+                <div> "is_dark: " {squares.is_dark.toString()} </div>
+            </form>
 
-    );//END RETURN
-         // squares.files.forEach(element => console.log(element));
-         //console.log("look at them squares files: " + JSON.stringify(squares.files));//wtf is in here
+          );//END RETURN
 
-
-
+    //FINAL RETURN!
     return (
       <form onSubmit={this.handleSubmit}>
         <label>
@@ -248,8 +224,6 @@ class NameForm extends React.Component {
 
 
       </form>
-
-
 
     );//END RETURN
   }//END THE FORM render!
