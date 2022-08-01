@@ -9,14 +9,22 @@ https://archive.org/metadata/TheAdventuresOfTomSawyer
 
 */
 
+function   truncateString(str, n){//problem is SourceName, too long -only allow 10 chars
+        return (str.length > n) ? str.slice(0, n-1) + '... ' : str;//
+      }
+
 //gonna pass in squares.files
 //which often has: name, title, source, format
 //would be nice to actually catch when that property ain't there
 function Square(props) {
-  console.log("Square props: " + props);
+  //try truncating name here?
+   const truncatedName = props.name.length>=10? truncateString(props.name, 10) : props.name;
+
+
+  console.log("Square props.name length: " + props.name.length);
   return (
     <div className="square" onClick={props.onClick}>
-      <p>Source Name: {props.name}</p>
+      <p>Source Name: {truncatedName}</p>
       <p>Source Title: {props.title}</p>
       <p>{"Source Type: " + props.source}</p>
       <p>{"Format : " + props.format}</p>
@@ -26,45 +34,49 @@ function Square(props) {
 
 class Board extends React.Component {
 
-    truncateString(str, n){//problem is SourceName, too long -only allow 10 chars
-        return (str.length > n) ? str.slice(0, n-1) + '... ' : str;//
-      }
 
-  renderSquare(i) {
+
+  renderSquare(item) {
     console.log(" Board.renderSquare props: " + this.props);
      console.log(JSON.stringify(this.props));
     //{"squares":[{"name":"michael","age":70,"count":233482},{"name":"matthew","age":36,"count":34742},{"name":"jane","age":36,"count":35010}]}
 
 
-    //const truncatedName =
-    //this.props.squares[i].name != undefined
 
-    console.log("number of rows" + this.props.squares % 3);
-    let rowNum = this.props.squares % 3;
+
+    console.log("number of rows" + this.props.squares.length % 3);
+    let rowNum = this.props.squares.length % 3;
 
     return (
       <Square
-        name={this.props.squares[i].name}
-        title={this.props.squares[i].title}
-        source={this.props.squares[i].source}
-        format={this.props.squares[i].format}
-        onClick={() => this.props.onClick(i)}
+        name={item.name}
+        title={item.title}
+        source={item.source}
+        format={item.format}
+        onClick={() => this.props.onClick(item)}
       />
     );
   } //end of renderSquare: spits out Squares within a Board, each has a click function
 
+
+
   render() {
+
+         this.props.squares.forEach(element => console.log("Files array element, might have to do .name: " + element.name));
+
+        const fileItems = [this.props.squares.map((item, index) =>
+          <div key={index}>
+            {this.renderSquare(item)}
+          </div>
+        )];
 
     return (
       <div>
 
         <div className="board-row">
-          {this.renderSquare(0)}
-          <div></div>
-          {this.renderSquare(1)}
-          <div></div>
-          {this.renderSquare(2)}
+           {fileItems}
         </div>
+
 
       </div>
     );
@@ -120,15 +132,15 @@ class NameForm extends React.Component {
 
   }//end handleSubmit
 
-    handleClick(i) {
+    handleClick(item) {
     //const history = this.state.history;
     //const current = history[history.length - 1];
     const squares = this.state.squares.slice();
 
-    console.log("look! I'm in this click!! ", squares[i])//non-empty
-    squares[i].age = 5;
-     squares[i].age = 5;//THIS WORKS!!!
-     console.log("look again! ", squares[i].age)
+   // console.log("look! I'm in this click!! ", squares[i])//non-empty
+    //squares[i].age = 5;
+    // squares[i].age = 5;//THIS WORKS!!!
+    // console.log("look again! ", squares[i].age)
 
     this.setState({
       squares: squares,
